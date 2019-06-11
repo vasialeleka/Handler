@@ -2,12 +2,15 @@ package com.vasialeleka.handler
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
+    lateinit var h:Handler
     override fun onClick(v: View?) {
         when (v) {
             btnStart -> startSomething()
@@ -24,7 +27,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             for (i in 0..10) {
                 // something long
                 longProcess()
-                info.text = "Long proceess" + i
+                h.sendEmptyMessage(i)
             }
         })
         thread.start()
@@ -39,5 +42,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         btnStart.setOnClickListener(this)
+        btnTest.setOnClickListener(this)
+         h = object : Handler() {
+            override fun handleMessage(msg: Message) {
+                info.text = "Long proceess" + msg.what
+            }
+        }
     }
 }
