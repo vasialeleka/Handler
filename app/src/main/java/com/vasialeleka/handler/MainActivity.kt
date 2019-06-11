@@ -7,9 +7,9 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
 
-class MainActivity : AppCompatActivity() , View.OnClickListener{
+class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
-        when(v){
+        when (v) {
             btnStart -> startSomething()
             btnTest -> showToast("Test")
         }
@@ -20,12 +20,15 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
     }
 
     private fun startSomething() {
-        for (i in 0..10){
-            // something long
-            longProcess()
-            info.text = "Long proceess" + i
+        var thread = Thread(Runnable {
+            for (i in 0..10) {
+                // something long
+                longProcess()
+                info.text = "Long proceess" + i
+            }
+        })
+        thread.start()
 
-        }
     }
 
     private fun longProcess() {
@@ -35,5 +38,6 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        btnStart.setOnClickListener(this)
     }
 }
